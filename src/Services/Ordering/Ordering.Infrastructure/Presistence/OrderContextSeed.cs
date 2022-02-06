@@ -20,7 +20,7 @@ namespace Ordering.Infrastructure.Presistence
             }
         }
 
-        private static IEnumerable<Order> GetPreconfiguredOrders()
+        private static IEnumerable<Order> GetPreconfiguredOrders()  
         {
             return new List<Order>
             {

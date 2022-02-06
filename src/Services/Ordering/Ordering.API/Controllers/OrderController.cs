@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
-using MediatR
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -19,6 +19,11 @@ namespace Ordering.API.Controllers
     public class OrderController : ControllerBase
     {
         private readonly IMediator _mediator;
+
+        public OrderController(IMediator mediator)
+        {
+            _mediator = mediator;
+        }
 
         [HttpGet("{userName}", Name = "GetOrder")]
         [ProducesResponseType(typeof(IEnumerable<OrdersVm>), (int)HttpStatusCode.OK)]
