@@ -22,7 +22,7 @@ namespace Ordering.API
                 var logger = serviceProvider.GetService<ILogger<OrderContextSeed>>();
                 OrderContextSeed.SeedAsync(context, logger).Wait(); ;
 
-            }, 10)
+            })
             .Run();
         }
 

@@ -12,6 +12,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Ordering.Application;
 using Ordering.Infrastructure;
+using MassTransit;
+using EventBus.Message.Common;
+using Ordering.API.EventBusConsumer;
 
 namespace Ordering.API
 {
@@ -30,6 +33,20 @@ namespace Ordering.API
             services.AddApplicationServices();
             services.AddInfrastructureServices(Configuration);
             services.AddControllers();
+            services.AddAutoMapper(typeof(Startup));
+
+            services.AddMassTransit(config => {
+                config.AddConsumer<BasketCheckoutConsumer>();
+                config.UsingRabbitMq((ctx, cfg) =>
+                {
+                    cfg.Host(Configuration["EventBusSettings:HostAddress"]);
+                    cfg.ReceiveEndpoint(EventBusConstants.BasketCheckoutQueue, c=> { c.ConfigureConsumer<BasketCheckoutConsumer>(ctx); });
+                });
+            });
+
+            services.AddScoped<BasketCheckoutConsumer>();
+
+            services.AddMassTransitHostedService();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Ordering.API", Version = "v1" });
